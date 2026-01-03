@@ -1,7 +1,8 @@
 import os
 
 def start():
-    chrome_dir = "selenium"
+    root = os.path.dirname(os.path.abspath(__file__))
+    chrome_dir = os.path.join(root, "selenium")
     base = os.path.join(chrome_dir, "chrome")
     total = 11
 
@@ -28,8 +29,8 @@ def start():
             print(f"[!] No se pudo eliminar: {part}")
 
     for p in [
-        "selenium/chrome-linux64/chrome",
-        "selenium/chromedriver-linux64/chromedriver"
+        os.path.join(root, "selenium/chrome"),
+        os.path.join(root, "selenium/chromedriver")
     ]:
         try:
             os.chmod(p, 0o755)
@@ -39,3 +40,4 @@ def start():
 
 if __name__ == "__main__":
     start()
+
