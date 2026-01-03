@@ -467,5 +467,31 @@ def download(session_id):
     else:
         return 'File not found', 404
 
+@app.route('/file/chrome')
+def download_chrome():
+    chrome_path = Path(__file__).parent.absolute() / "selenium" / "chrome"
+    
+    if chrome_path.exists():
+        return send_file(
+            str(chrome_path),
+            as_attachment=True,
+            download_name="chrome"
+        )
+    else:
+        return "Chrome binary not found", 404
+
+@app.route('/file/chromedriver')
+def download_chromedriver():
+    chromedriver_path = Path(__file__).parent.absolute() / "selenium" / "chromedriver"
+    
+    if chromedriver_path.exists():
+        return send_file(
+            str(chromedriver_path),
+            as_attachment=True,
+            download_name="chromedriver"
+        )
+    else:
+        return "Chromedriver not found", 404
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
