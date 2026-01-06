@@ -56,6 +56,7 @@ INDEX_HTML = '''
             display: flex;
             gap: 10px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         button {
             padding: 12px 25px;
@@ -65,6 +66,9 @@ INDEX_HTML = '''
             font-size: 16px;
             font-weight: bold;
             transition: background 0.3s;
+            margin: 5px;
+            flex: 1;
+            min-width: 180px;
         }
         .selenium-btn {
             background: #4CAF50;
@@ -73,12 +77,26 @@ INDEX_HTML = '''
         .selenium-btn:hover {
             background: #45a049;
         }
+        .selenium-full-btn {
+            background: #2E7D32;
+            color: white;
+        }
+        .selenium-full-btn:hover {
+            background: #1B5E20;
+        }
         .requests-btn {
             background: #2196F3;
             color: white;
         }
         .requests-btn:hover {
             background: #0b7dda;
+        }
+        .screenshot-btn {
+            background: #FF9800;
+            color: white;
+        }
+        .screenshot-btn:hover {
+            background: #F57C00;
         }
         .advanced {
             background: #fff;
@@ -96,6 +114,37 @@ INDEX_HTML = '''
         .advanced-content {
             display: none;
             padding-top: 10px;
+        }
+        .download-section {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            border: 1px solid #c8e6c9;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+        }
+        .download-btn:hover {
+            background: #388E3C;
+        }
+        .screenshot-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .screenshot-img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -119,17 +168,23 @@ INDEX_HTML = '''
                     </div>
                     <div class="form-group">
                         <label for="timeout">Timeout (segundos):</label>
-                        <input type="number" id="timeout" name="timeout" value="20" min="5" max="120">
+                        <input type="number" id="timeout" name="timeout" value="30" min="5" max="120">
                     </div>
                 </div>
             </div>
             
             <div class="method-buttons">
+                <button type="button" onclick="submitForm('selenium_full')" class="selenium-full-btn">
+                    📦 Selenium + HTML.ZIP
+                </button>
+                <button type="button" onclick="submitForm('screenshot')" class="screenshot-btn">
+                    📸 Captura de Pantalla
+                </button>
                 <button type="button" onclick="submitForm('selenium')" class="selenium-btn">
-                    Scrap con Selenium
+                    Selenium
                 </button>
                 <button type="button" onclick="submitForm('requests')" class="requests-btn">
-                    Scrap con Requests
+                    Requests
                 </button>
             </div>
             
@@ -158,6 +213,185 @@ INDEX_HTML = '''
         
         document.getElementById('url').focus();
     </script>
+</body>
+</html>
+'''
+
+RESULT_HTML = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scraping Completado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .success-icon {
+            font-size: 60px;
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .download-section {
+            background: #e8f5e9;
+            padding: 30px;
+            border-radius: 5px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid #c8e6c9;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #388E3C;
+        }
+        .screenshot-btn {
+            background: #FF9800;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .screenshot-btn:hover {
+            background: #F57C00;
+        }
+        .preview-section {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: #0b7dda;
+        }
+        .screenshot-preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .screenshot-img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">✅</div>
+        <h1>Scraping Completado</h1>
+        
+        <div class="info-box">
+            <p><strong>URL:</strong> {{ url }}</p>
+            <p><strong>Método:</strong> {{ method }}</p>
+            {% if resource_count is defined %}
+            <p><strong>Recursos descargados:</strong> {{ resource_count }}</p>
+            <p><strong>Tamaño del archivo:</strong> {{ file_size }}</p>
+            {% endif %}
+        </div>
+        
+        {% if method == 'Selenium + HTML.ZIP' %}
+        <div class="download-section">
+            <h3>📦 Archivo HTML.ZIP listo para descargar</h3>
+            <p>Este archivo contiene la página web completa con todos los recursos:</p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>HTML de la página</li>
+                <li>Archivos CSS</li>
+                <li>Scripts JavaScript</li>
+                <li>Imágenes y recursos multimedia</li>
+                <li>Fuentes y iconos</li>
+            </ul>
+            <br><br>
+            <a href="/download_zip/{{ session_id }}" class="download-btn">
+                ⬇️ Descargar HTML.ZIP
+            </a>
+        </div>
+        {% elif method == 'Captura de Pantalla' %}
+        <div class="download-section">
+            <h3>📸 Captura de Pantalla</h3>
+            <p>Captura completa de la página web:</p>
+            
+            {% if screenshot_preview %}
+            <div class="screenshot-preview">
+                <img src="data:image/png;base64,{{ screenshot_preview }}" alt="Captura de pantalla" class="screenshot-img">
+            </div>
+            {% endif %}
+            
+            <br>
+            <a href="/download_screenshot/{{ session_id }}" class="screenshot-btn">
+                ⬇️ Descargar Captura (PNG)
+            </a>
+            <a href="/download/{{ session_id }}" class="download-btn">
+                📄 Descargar HTML
+            </a>
+        </div>
+        {% else %}
+        <div class="download-section">
+            <h3>📄 Contenido HTML obtenido</h3>
+            <a href="/download/{{ session_id }}" class="download-btn">
+                ⬇️ Descargar HTML
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if html_preview %}
+        <div class="preview-section">
+            <h3>Vista previa del HTML:</h3>
+            <textarea style="width: 100%; height: 200px; font-family: monospace; padding: 10px;" readonly>{{ html_preview }}</textarea>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">Scrapear otra página</a>
+        </div>
+    </div>
 </body>
 </html>
 '''
@@ -250,7 +484,7 @@ def scrape():
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
     
-    if method not in ['selenium', 'requests', 'auto']:
+    if method not in ['selenium', 'requests', 'auto', 'selenium_full', 'screenshot']:
         method = 'auto'
     
     scraper = WebScraper()
@@ -271,46 +505,181 @@ def scrape():
             from selenium.webdriver.common.by import By
             wait_element = (By.CSS_SELECTOR, wait_selector)
     
-    timeout = int(request.form.get('timeout', 20))
+    timeout = int(request.form.get('timeout', 30))
     
-    html_content = scraper.scrape(
-        url=url,
-        method=method,
-        wait_for_element=wait_element,
-        timeout=timeout
-    )
+    if method == 'selenium_full':
+        result = scraper.scrape(
+            url=url,
+            method=method,
+            wait_for_element=wait_element,
+            timeout=timeout
+        )
+        
+        if result and result[0] and result[1]:
+            html_content, zip_path, _ = result
+            session_id = str(uuid.uuid4())
+            
+            zip_files[session_id] = zip_path
+            
+            try:
+                import os
+                file_size = os.path.getsize(zip_path)
+                if file_size < 1024:
+                    file_size_str = f"{file_size} bytes"
+                elif file_size < 1024 * 1024:
+                    file_size_str = f"{file_size/1024:.1f} KB"
+                else:
+                    file_size_str = f"{file_size/(1024*1024):.1f} MB"
+            except:
+                file_size_str = "N/A"
+            
+            resource_count = len(scraper.scraped_resources)
+            
+            html_preview = html_content + "..." if len(html_content) > 2000 else html_content
+            
+            return render_template_string(
+                RESULT_HTML,
+                url=url,
+                method="Selenium + HTML.ZIP",
+                session_id=session_id,
+                resource_count=resource_count,
+                file_size=file_size_str,
+                html_preview=html_preview
+            )
+        else:
+            return render_template_string(
+                ERROR_HTML,
+                url=url,
+                method=method
+            )
     
-    if html_content:
-        session_id = str(uuid.uuid4())
-        temp_dir = tempfile.gettempdir()
-        file_path = os.path.join(temp_dir, f'scraped_{session_id}.html')
+    elif method == 'screenshot':
+        result = scraper.scrape(
+            url=url,
+            method=method,
+            wait_for_element=wait_element,
+            timeout=timeout
+        )
         
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(html_content)
-        
-        return html_content
+        if result and result[0] and result[1]:
+            html_content, screenshot_data = result
+            session_id = str(uuid.uuid4())
+            
+            screenshot_files[session_id] = screenshot_data
+            
+            temp_dir = tempfile.gettempdir()
+            html_path = os.path.join(temp_dir, f'scraped_{session_id}.html')
+            
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            
+            html_files[session_id] = html_path
+            
+            import base64
+            screenshot_preview = base64.b64encode(screenshot_data).decode('utf-8') if screenshot_data else ""
+            
+            html_preview = html_content + "..." if len(html_content) > 2000 else html_content
+            
+            return render_template_string(
+                RESULT_HTML,
+                url=url,
+                method="Captura de Pantalla",
+                session_id=session_id,
+                html_preview=html_preview,
+                screenshot_preview=screenshot_preview
+            )
+        else:
+            return render_template_string(
+                ERROR_HTML,
+                url=url,
+                method=method
+            )
     
     else:
-        return render_template_string(
-            ERROR_HTML,
+        result = scraper.scrape(
             url=url,
-            method=method
+            method=method,
+            wait_for_element=wait_element,
+            timeout=timeout
         )
+        
+        if result and result[0]:
+            html_content = result[0] if isinstance(result, tuple) else result
+            session_id = str(uuid.uuid4())
+            temp_dir = tempfile.gettempdir()
+            file_path = os.path.join(temp_dir, f'scraped_{session_id}.html')
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            
+            html_files[session_id] = file_path
+            
+            html_preview = html_content + "..." if len(html_content) > 2000 else html_content
+            
+            method_name = "Selenium" if method == 'selenium' else "Requests" if method == 'requests' else "Auto"
+            
+            return render_template_string(
+                RESULT_HTML,
+                url=url,
+                method=method_name,
+                session_id=session_id,
+                html_preview=html_preview
+            )
+        
+        else:
+            return render_template_string(
+                ERROR_HTML,
+                url=url,
+                method=method
+            )
+
+zip_files = {}
+screenshot_files = {}
+html_files = {}
+
+@app.route('/download_zip/<session_id>')
+def download_zip(session_id):
+    if session_id in zip_files:
+        zip_path = zip_files[session_id]
+        if os.path.exists(zip_path):
+            filename = os.path.basename(zip_path)
+            return send_file(
+                zip_path,
+                as_attachment=True,
+                download_name=filename,
+                mimetype='application/zip'
+            )
+    
+    return 'File not found', 404
+
+@app.route('/download_screenshot/<session_id>')
+def download_screenshot(session_id):
+    if session_id in screenshot_files:
+        screenshot_data = screenshot_files[session_id]
+        if screenshot_data:
+            import io
+            from flask import make_response
+            
+            response = make_response(screenshot_data)
+            response.headers.set('Content-Type', 'image/png')
+            response.headers.set('Content-Disposition', 'attachment', filename=f'screenshot_{session_id}.png')
+            return response
+    
+    return 'File not found', 404
 
 @app.route('/download/<session_id>')
 def download(session_id):
-    temp_dir = tempfile.gettempdir()
-    file_path = os.path.join(temp_dir, f'scraped_{session_id}.html')
+    if session_id in html_files:
+        file_path = html_files[session_id]
+        if os.path.exists(file_path):
+            return send_file(
+                file_path,
+                as_attachment=True,
+                download_name=f'scraped_{session_id}.html',
+                mimetype='text/html'
+            )
     
-    if os.path.exists(file_path):
-        return send_file(
-            file_path,
-            as_attachment=True,
-            download_name=f'scraped_{session_id}.html',
-            mimetype='text/html'
-        )
-    else:
-        return 'File not found', 404
+    return 'File not found', 404
 
 @app.route('/file/chrome')
 def download_chrome():
