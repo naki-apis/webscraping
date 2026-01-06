@@ -522,7 +522,6 @@ def scrape():
             zip_files[session_id] = zip_path
             
             try:
-                import os
                 file_size = os.path.getsize(zip_path)
                 if file_size < 1024:
                     file_size_str = f"{file_size} bytes"
